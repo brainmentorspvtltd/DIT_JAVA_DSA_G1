@@ -1,4 +1,8 @@
 package codes; // My class is inside codes package
+
+
+import java.util.Locale;
+
 // Class - Noun (Employee, Customer, Person, Student , Account , Product)
 // class - PascalCase e.g FullTimeEmployee
 // OOPS + SOLID Soft Eng.
@@ -10,6 +14,9 @@ package codes; // My class is inside codes package
 // Encapsulation - Binding Data and Methods into a single unit , and that unit is class.
 // Good Encapsulation - private Data and public Method
 // Data Hiding
+// Object - It is God class / Root Class in Java
+// Every class directly or indirectly a child of Object class.
+//public class Employee extends Object{
 public class Employee{
     // Features
     // Instance Variables
@@ -24,6 +31,8 @@ public class Employee{
    private double bonus;
    private String dept;
    private String manager;
+   private Formatting formatting;
+   private Locale locale;
 
    
 
@@ -88,28 +97,35 @@ public void setManager(String manager) {
     this.manager = manager;
 }
     {
-        System.out.println(" i am a init block , pre constructor call");
-        System.out.println(" INIT BLOCK ::: Id "+id + " name "+name + " Salary "+salary);
+        //System.out.println(" i am a init block , pre constructor call");
+        //System.out.println(" INIT BLOCK ::: Id "+id + " name "+name + " Salary "+salary);
     }
 
     {
-        System.out.println("Init Block2");
+        //System.out.println("Init Block2");
     }
 
     // this is a default constructor
    public Employee(){
     companyName = "Brain Mentors";
+    
     // System.out.println("I am a Default Cons");
     // id =111;
     // name = "No Name";
     // salary = 1111;
     // System.out.println(" Cons Values ::: Id "+id + " name "+name + " Salary "+salary);
    }
+   public Employee(Locale locale){
+    this(); // Call Default Const
+    this.locale = locale;
+    formatting = new Formatting(this.locale);
+   }
    // Constructor Overloading
    // Param Constructor
-   public Employee(int id , String name, double salary){
+   public Employee(int id , String name, double salary, Locale locale){
     // Constructor Chaining
-    this(); // call default constructor , mustbe the first line
+    this(locale); // One Arg Constructor
+    //this(); // call default constructor , mustbe the first line
     if(validate(id, name, salary)){
         this.id = id;
         this.name = name;
@@ -152,10 +168,34 @@ public void setManager(String manager) {
     }
     // public - keyword - provide access with in the package and outside the package
     public void print(){
+       
         // this - keyword (it contains the current calling object reference)
+        System.out.println("Current Date "+formatting.doDateFormat());
         System.out.println("Id "+this.id);
         System.out.println("Name "+name);
-        System.out.println("Salary "+salary);
+        System.out.println("Salary "+formatting.doCurrencyFormat(salary));
         System.out.println("Company Name "+companyName);
+    }
+    @Override
+     public boolean equals(Object object){
+            // this (emp1)
+            // object (emp2) // Upcast to object.
+            // Ref compare
+            if(this == object){
+                return true;
+            }
+            if(object instanceof Employee){
+                Employee e = (Employee) object; // Downcasting
+                if(this.id == e.id && this.name.equals((e.name)) && this.salary == e.salary){
+                    return true;
+                }
+            }
+            return false;
+
+     }
+
+    @Override
+    public String toString(){
+            return "Id "+id + " Name "+name+" Salary "+formatting.doCurrencyFormat(salary);
     }
 }
